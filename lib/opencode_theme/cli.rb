@@ -178,40 +178,24 @@ module OpencodeTheme
     method_option :keep_files, type: :boolean, default: false
 
 
-    # def watch
-    #   watcher do |filename, event|
-    #     filename = filename.gsub("#{Dir.pwd}/", '')
-    #     unless local_assets_list.include?(filename)
-    #       say("Unknown file [#{filename}]", :red)
-    #       next
-    #     end
-    #     action = if [:changed, :new].include?(event)
-    #                 :send_asset
-    #     elsif event == :delete
-    #       :delete_asset
-    #     else
-    #       raise NotImplementedError, "Unknown event -- #{event} -- #{filename}"
-    #     end
-    #     send(action, filename, options['quiet'])
-    #   end
-    # end
-    def watch
-      watcher do |filename, event|
-        filename = filename.gsub("#{Dir.pwd}/", '')
-      if is_file?(filename)
-
-        action = if [:changed, :new].include?(event)
-          :send_asset
-        elsif event == :delete
-          :delete_asset
+     def watch
+       watcher do |filename, event|
+         filename = filename.gsub("#{Dir.pwd}/", '')
+         unless local_assets_list.include?(filename)
+           say("Unknown file [#{filename}]", :red)
+           next
+         end
+         action = if [:changed, :new].include?(event)
+                     :send_asset
+         elsif event == :delete
+           :delete_asset
         else
-          say("This is not file [#{filename}]", :blue)
-          raise NotImplementedError, "Unknown event -- #{event} -- #{filename}"
-        end
-        send(action, filename, options['quiet'])
-      else
-        next
-      end
+           raise NotImplementedError, "Unknown event -- #{event} -- #{filename}"
+         end
+         send(action, filename, options['quiet'])
+       end
+     end
+    
 
 
       end
